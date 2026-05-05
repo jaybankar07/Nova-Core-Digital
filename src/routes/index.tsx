@@ -1,26 +1,50 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/Navbar";
+import { Hero } from "@/components/Hero";
+import { About } from "@/components/About";
+import { Services } from "@/components/Services";
+import { WhyChooseUs } from "@/components/WhyChooseUs";
+import { Portfolio } from "@/components/Portfolio";
+import { Testimonials } from "@/components/Testimonials";
+import { Contact } from "@/components/Contact";
+import { Footer } from "@/components/Footer";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "NovaCore Digital — Web Design, Marketing & AI Automation" },
+      {
+        name: "description",
+        content:
+          "NovaCore Digital builds modern websites, growth marketing campaigns, and AI automations for ambitious startups and SMBs.",
+      },
+      { property: "og:title", content: "NovaCore Digital — Modern Digital Experiences" },
+      {
+        property: "og:description",
+        content:
+          "Web design, social marketing, branding, SEO, and AI automation for growing businesses.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
+function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background text-foreground antialiased">
+      <Navbar />
+      <main>
+        <Hero />
+        <About />
+        <Services />
+        <WhyChooseUs />
+        <Portfolio />
+        <Testimonials />
+        <Contact />
+      </main>
+      <Footer />
+      <Toaster richColors position="top-right" />
     </div>
   );
-}
-
-function Index() {
-  return <PlaceholderIndex />;
 }
