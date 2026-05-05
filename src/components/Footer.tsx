@@ -1,88 +1,55 @@
-import { Sparkles, Twitter, Linkedin, Instagram, Github } from "lucide-react";
-
-const links = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Projects", href: "#portfolio" },
-  { label: "Contact", href: "#contact" },
-];
-
-const socials = [
-  { icon: Twitter, label: "Twitter" },
-  { icon: Linkedin, label: "LinkedIn" },
-  { icon: Instagram, label: "Instagram" },
-  { icon: Github, label: "GitHub" },
-];
+import { Twitter, Instagram, Linkedin, Github, Sparkles } from "lucide-react";
 
 export function Footer() {
-  const handleNav = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
-    const id = href.replace("#", "");
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
   return (
-    <footer className="border-t border-border bg-background">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 py-14">
-        <div className="grid gap-10 md:grid-cols-3">
-          <div className="max-w-sm">
-            <a href="#home" onClick={(e) => handleNav(e, "#home")} className="flex items-center gap-2 font-semibold">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow">
+    <footer className="bg-[#0B0B0F] border-t border-white/10 pt-16 pb-8">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+          <div className="col-span-1 md:col-span-2">
+            <a href="#home" className="flex items-center gap-2 font-bold tracking-tight mb-6 inline-flex">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 text-white">
                 <Sparkles className="h-4 w-4" />
               </span>
-              NovaCore Digital
+              <span className="text-xl text-white">NovaCore Digital</span>
             </a>
-            <p className="mt-4 text-sm text-muted-foreground">
-              Building modern digital experiences for growing businesses — from
-              brand to launch to growth.
+            <p className="text-gray-400 max-w-sm mb-6">
+              Building modern digital experiences for growing businesses — from brand to launch to growth.
             </p>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-foreground">Quick links</h4>
-            <ul className="mt-4 space-y-2.5">
-              {links.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    onClick={(e) => handleNav(e, l.href)}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-foreground">Follow us</h4>
-            <div className="mt-4 flex gap-2">
-              {socials.map(({ icon: Icon, label }) => (
-                <a
-                  key={label}
-                  href="#"
-                  aria-label={label}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground hover:text-foreground hover:border-indigo-500 hover:scale-105 transition"
-                >
-                  <Icon className="h-4 w-4" />
+            <div className="flex gap-4">
+              {[Twitter, Instagram, Linkedin, Github].map((Icon, i) => (
+                <a key={i} href="#" className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                  <Icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
-            <p className="mt-6 text-sm text-muted-foreground">
-              hello@novacoredigital.com
-            </p>
+          </div>
+          
+          <div>
+            <h4 className="font-bold text-white mb-6">Quick Links</h4>
+            <ul className="space-y-3 text-gray-400 text-sm">
+              <li><a href="#home" className="hover:text-indigo-400 transition-colors">Home</a></li>
+              <li><a href="#about" className="hover:text-indigo-400 transition-colors">About</a></li>
+              <li><a href="#services" className="hover:text-indigo-400 transition-colors">Services</a></li>
+              <li><a href="#portfolio" className="hover:text-indigo-400 transition-colors">Projects</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="font-bold text-white mb-6">Legal</h4>
+            <ul className="space-y-3 text-gray-400 text-sm">
+              <li><a href="#" className="hover:text-indigo-400 transition-colors">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-indigo-400 transition-colors">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-indigo-400 transition-colors">Cookie Policy</a></li>
+            </ul>
           </div>
         </div>
-
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-border pt-6">
-          <p className="text-xs text-muted-foreground">
+        
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} NovaCore Digital. All rights reserved.
           </p>
-          <p className="text-xs text-muted-foreground">
-            Crafted with care in Berlin.
+          <p className="text-sm text-gray-500">
+            Crafted with passion in Berlin.
           </p>
         </div>
       </div>

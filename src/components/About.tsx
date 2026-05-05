@@ -1,55 +1,73 @@
-import { Rocket, Palette, Target } from "lucide-react";
+import { motion } from "framer-motion";
+import { Zap, Layout, TrendingUp } from "lucide-react";
 
 const highlights = [
   {
-    icon: Rocket,
     title: "Fast Delivery",
-    desc: "From kickoff to launch in days — not months. Tight scope, sharp execution.",
+    description: "From kickoff to launch in days, not months. We ship features fast.",
+    icon: Zap,
+    color: "from-amber-400 to-orange-500"
   },
   {
-    icon: Palette,
     title: "Modern Design",
-    desc: "Clean, on-brand interfaces crafted to feel premium on every device.",
+    description: "Clean, performant, and premium interfaces crafted for your brand.",
+    icon: Layout,
+    color: "from-indigo-400 to-violet-500"
   },
   {
-    icon: Target,
     title: "Conversion Focused",
-    desc: "Every section earns its place. We design for clicks, leads, and revenue.",
-  },
+    description: "Every pixel is optimized to turn visitors into paying customers.",
+    icon: TrendingUp,
+    color: "from-emerald-400 to-teal-500"
+  }
 ];
 
 export function About() {
   return (
-    <section id="about" className="scroll-mt-20 py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="max-w-2xl">
-          <p className="text-xs font-semibold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
-            About us
-          </p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            A small studio building serious digital products.
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            NovaCore Digital is a focused team of designers, developers, and
-            marketers helping startups and growing brands launch fast, look
-            sharp, and convert better. We blend craft with strategy — so every
-            pixel works for your business.
-          </p>
+    <section id="about" className="py-24 bg-[#0B0B0F] relative overflow-hidden">
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl sm:text-5xl font-bold text-white mb-6"
+          >
+            A small studio building <br className="hidden sm:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-500">serious digital products.</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-lg text-gray-400"
+          >
+            NovaCore Digital is a focused team of designers, developers, and marketers helping startups and growing brands launch fast, look sharp, and convert better.
+          </motion.p>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {highlights.map(({ icon: Icon, title, desc }) => (
-            <div
-              key={title}
-              className="group rounded-2xl border border-border bg-card p-6 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-indigo-500/5"
-            >
-              <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md">
-                <Icon className="h-5 w-5" />
-              </div>
-              <h3 className="mt-5 text-lg font-semibold text-foreground">{title}</h3>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-            </div>
-          ))}
+        <div className="grid md:grid-cols-3 gap-8">
+          {highlights.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 p-8 hover:bg-white/10 transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_-5px_rgba(255,255,255,0.1)]"
+              >
+                <div className={`inline-flex items-center justify-center p-4 rounded-xl bg-gradient-to-br ${item.color} shadow-lg mb-6`}>
+                  <Icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3">{item.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{item.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

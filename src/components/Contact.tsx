@@ -1,165 +1,151 @@
 import { useState } from "react";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
-import { z } from "zod";
-import { toast } from "sonner";
-
-const schema = z.object({
-  name: z.string().trim().min(2, "Please enter your name").max(100),
-  email: z.string().trim().email("Please enter a valid email").max(255),
-  message: z.string().trim().min(10, "Message must be at least 10 characters").max(1000),
-});
-
-type FormState = { name: string; email: string; message: string };
-type Errors = Partial<Record<keyof FormState, string>>;
-
-const initial: FormState = { name: "", email: "", message: "" };
+import { motion } from "framer-motion";
+import { Mail, Phone, MapPin, CheckCircle2 } from "lucide-react";
 
 export function Contact() {
-  const [form, setForm] = useState<FormState>(initial);
-  const [errors, setErrors] = useState<Errors>({});
-  const [submitting, setSubmitting] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errors, setErrors] = useState<{name?: string; email?: string; message?: string}>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
-    if (errors[name as keyof FormState]) setErrors((e) => ({ ...e, [name]: undefined }));
+  const validate = () => {
+    let temp: any = {};
+    if (!formData.name) temp.name = "Name is required.";
+    if (!/\S+@\S+\.\S+/.test(formData.email)) temp.email = "Email is invalid.";
+    if (!formData.message) temp.message = "Message is required.";
+    setErrors(temp);
+    return Object.keys(temp).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const result = schema.safeParse(form);
-    if (!result.success) {
-      const fieldErrors: Errors = {};
-      for (const issue of result.error.issues) {
-        const key = issue.path[0] as keyof FormState;
-        if (!fieldErrors[key]) fieldErrors[key] = issue.message;
-      }
-      setErrors(fieldErrors);
-      return;
-    }
-    setSubmitting(true);
+    if (!validate()) return;
+    
+    setStatus("submitting");
     setTimeout(() => {
-      toast.success("Message sent!", {
-        description: "Thanks for reaching out — we'll get back to you within 24 hours.",
-      });
-      setForm(initial);
-      setErrors({});
-      setSubmitting(false);
-    }, 600);
+      setStatus("success");
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 5000);
+    }, 1500);
   };
 
-  const inputClass = (hasError?: boolean) =>
-    `w-full rounded-lg border bg-background px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/70 transition focus:outline-none focus:ring-2 focus:ring-indigo-500/40 ${
-      hasError ? "border-destructive" : "border-border"
-    }`;
-
   return (
-    <section
-      id="contact"
-      className="scroll-mt-20 py-20 sm:py-28 bg-gradient-to-b from-transparent via-indigo-50/40 to-transparent dark:via-indigo-950/10"
-    >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs font-semibold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
-            Get in touch
-          </p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            Let's build something great together.
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            Tell us about your project — we usually reply within one business day.
-          </p>
-        </div>
-
-        <div className="mt-14 grid gap-10 lg:grid-cols-5">
-          <div className="lg:col-span-2 space-y-6">
-            {[
-              { icon: Mail, label: "Email", value: "hello@novacoredigital.com", href: "mailto:hello@novacoredigital.com" },
-              { icon: Phone, label: "Phone", value: "+91 90000 00000", href: "tel:+910000000000" },
-              { icon: MapPin, label: "Location", value: "Berlin, Germany" },
-            ].map(({ icon: Icon, label, value, href }) => (
-              <div key={label} className="flex items-start gap-4 rounded-2xl border border-border bg-card p-5">
-                <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <div className="min-w-0">
-                  <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{label}</div>
-                  {href ? (
-                    <a href={href} className="mt-1 block text-sm font-medium text-foreground hover:text-indigo-600 break-all">
-                      {value}
-                    </a>
-                  ) : (
-                    <div className="mt-1 text-sm font-medium text-foreground">{value}</div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="lg:col-span-3 rounded-2xl border border-border bg-card p-6 sm:p-8 shadow-sm"
+    <section id="contact" className="py-24 bg-[#0B0B0F] relative">
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0B0B0F] via-indigo-950/20 to-[#0B0B0F] -z-10" />
+      
+      <div className="mx-auto max-w-7xl px-6 sm:px-8">
+        <div className="grid md:grid-cols-2 gap-16">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
           >
-            <div className="grid gap-5 sm:grid-cols-2">
+            <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">
+              Let's build something <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-500">great together.</span>
+            </h2>
+            <p className="text-lg text-gray-400 mb-10">
+              Tell us about your project — we usually reply within one business day.
+            </p>
+
+            <div className="space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  <Mail className="w-5 h-5 text-indigo-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Email Us</p>
+                  <a href="mailto:hello@novacoredigital.com" className="text-white hover:text-indigo-400 transition-colors font-medium">hello@novacoredigital.com</a>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-indigo-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Call Us</p>
+                  <a href="tel:+910000000000" className="text-white hover:text-indigo-400 transition-colors font-medium">+91 00000 00000</a>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-indigo-400" />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-400">Location</p>
+                  <p className="text-white font-medium">Berlin, Germany</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl relative"
+          >
+            {status === "success" ? (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-[#0B0B0F]/90 backdrop-blur-md rounded-2xl"
+              >
+                <CheckCircle2 className="w-16 h-16 text-emerald-500 mb-4" />
+                <h3 className="text-2xl font-bold text-white mb-2">Message Sent!</h3>
+                <p className="text-gray-400">We'll get back to you within 24 hours.</p>
+              </motion.div>
+            ) : null}
+
+            <form onSubmit={handleSubmit} className="space-y-5 relative">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-foreground mb-1.5">
-                  Name
-                </label>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
                 <input
-                  id="name"
-                  name="name"
                   type="text"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Jane Doe"
-                  maxLength={100}
-                  className={inputClass(!!errors.name)}
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className={`w-full bg-[#0B0B0F]/50 border ${errors.name ? 'border-red-500' : 'border-white/10 flex-col'} rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all`}
+                  placeholder="John Doe"
                 />
-                {errors.name && <p className="mt-1.5 text-xs text-destructive">{errors.name}</p>}
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
               </div>
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-foreground mb-1.5">
-                  Email
-                </label>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Email Address</label>
                 <input
-                  id="email"
-                  name="email"
                   type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="jane@company.com"
-                  maxLength={255}
-                  className={inputClass(!!errors.email)}
+                  value={formData.email}
+                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  className={`w-full bg-[#0B0B0F]/50 border ${errors.email ? 'border-red-500' : 'border-white/10'} rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all`}
+                  placeholder="john@example.com"
                 />
-                {errors.email && <p className="mt-1.5 text-xs text-destructive">{errors.email}</p>}
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
               </div>
-            </div>
-            <div className="mt-5">
-              <label htmlFor="message" className="block text-sm font-medium text-foreground mb-1.5">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={5}
-                value={form.message}
-                onChange={handleChange}
-                placeholder="Tell us a bit about your project, goals, and timeline…"
-                maxLength={1000}
-                className={inputClass(!!errors.message) + " resize-none"}
-              />
-              {errors.message && <p className="mt-1.5 text-xs text-destructive">{errors.message}</p>}
-            </div>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="mt-6 inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-600 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 hover:shadow-xl hover:scale-[1.02] transition disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {submitting ? "Sending…" : "Send message"}
-              <Send className="h-4 w-4" />
-            </button>
-          </form>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1.5">Project Details</label>
+                <textarea
+                  rows={4}
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  className={`w-full bg-[#0B0B0F]/50 border ${errors.message ? 'border-red-500' : 'border-white/10'} rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none`}
+                  placeholder="Tell us about your goals..."
+                />
+                {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message}</p>}
+              </div>
+
+              <button
+                type="submit"
+                disabled={status === 'submitting'}
+                className="w-full relative flex items-center justify-center rounded-lg bg-gradient-to-r from-indigo-500 to-violet-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-[#0B0B0F] disabled:opacity-70 transition-all hover:scale-[1.02]"
+              >
+                {status === 'submitting' ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  "Send Message"
+                )}
+              </button>
+            </form>
+          </motion.div>
         </div>
       </div>
     </section>

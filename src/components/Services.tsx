@@ -1,67 +1,75 @@
-import { Code2, Megaphone, Brush, TrendingUp, Bot } from "lucide-react";
+import { motion } from "framer-motion";
 
 const services = [
   {
-    icon: Code2,
     title: "Website Design & Development",
-    desc: "Custom marketing sites and web apps built with modern stacks — fast, responsive, and SEO-ready.",
+    description: "Modern, fast, and responsive websites tailored for business growth.",
+    icon: "🌐"
   },
   {
-    icon: Megaphone,
     title: "Social Media Marketing",
-    desc: "Content systems and paid campaigns that grow audiences and drive qualified traffic.",
+    description: "Content strategy, reels, and campaigns that drive engagement.",
+    icon: "📱"
   },
   {
-    icon: Brush,
     title: "Branding & Graphic Design",
-    desc: "Logos, identities, and visual systems that make your brand instantly recognisable.",
+    description: "Logos, brand identity, and visuals that stand out.",
+    icon: "🎨"
   },
   {
-    icon: TrendingUp,
     title: "SEO & Growth Marketing",
-    desc: "Technical SEO, content strategy, and CRO experiments that compound over time.",
+    description: "Improve rankings and generate quality leads organically.",
+    icon: "📈"
   },
   {
-    icon: Bot,
     title: "AI Automation",
-    desc: "Custom GPT workflows, chatbots, and internal tools that save your team hours every week.",
-  },
+    description: "Smart chatbots and automation tools to scale your business.",
+    icon: "🤖"
+  }
 ];
 
 export function Services() {
   return (
-    <section
-      id="services"
-      className="scroll-mt-20 py-20 sm:py-28 bg-gradient-to-b from-transparent via-indigo-50/40 to-transparent dark:via-indigo-950/10"
-    >
-      <div className="mx-auto max-w-6xl px-5 sm:px-8">
-        <div className="text-center max-w-2xl mx-auto">
-          <p className="text-xs font-semibold tracking-widest text-indigo-600 dark:text-indigo-400 uppercase">
-            What we do
-          </p>
-          <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-            Services that move the needle.
-          </h2>
-          <p className="mt-4 text-muted-foreground">
-            End-to-end design, marketing, and automation under one roof.
-          </p>
+    <section id="services" className="py-24 bg-[#0B0B0F] relative overflow-hidden">
+      {/* Decorative gradient */}
+      <div className="absolute top-0 right-0 -z-10 w-[500px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full" />
+      
+      <div className="mx-auto max-w-7xl px-6 sm:px-8 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl sm:text-5xl font-bold text-white mb-6"
+          >
+            Services that <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-500">move the needle.</span>
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-lg text-gray-400"
+          >
+            End-to-end design, marketing, and automation under one roof. We optimize for outcomes — leads, signups, revenue.
+          </motion.p>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map(({ icon: Icon, title, desc }) => (
-            <div
-              key={title}
-              className="group relative overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/10"
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {services.map((service, index) => (
+            <motion.div
+              key={service.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              className="group relative rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-8 hover:bg-white/10 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_-10px_rgba(99,102,241,0.2)]"
             >
-              <div className="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-indigo-500/10 to-violet-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="relative">
-                <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white shadow-md transition-transform group-hover:scale-110">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <h3 className="mt-5 text-lg font-semibold text-foreground">{title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
-              </div>
-            </div>
+              <div className="text-5xl mb-6">{service.icon}</div>
+              <h3 className="text-xl font-bold text-white mb-3">{service.title}</h3>
+              <p className="text-gray-400 leading-relaxed">{service.description}</p>
+            </motion.div>
           ))}
         </div>
       </div>
